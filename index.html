@@ -177,23 +177,32 @@
             min-width: 90px;
         }
         
+        #body-wrapper {
+            transform-origin: top center;
+        }
+
+        @media (max-width: 480px) {
+            #body-wrapper {
+                transform: scale(0.85);
+            }
+        }
     </style>
 </head>
 
 <body>
+    <div id="body-warpper"></div>
+        <img src="favicon.png" style="width:85px;">
 
-    <img src="favicon.png" style="width:85px;">
+        <div id="board-body">
+            <div id="board"></div>
+        </div>
+        <div id="blocks"></div>
 
-    <div id="board-body">
-        <div id="board"></div>
+        <div style="margin-top:20px; display:flex; align-items:center; gap:12px;">
+            <button id="blocks-refresh">Refresh</button>
+            <div id="refresh-count">남은 횟수: 3</div>
+        </div>
     </div>
-    <div id="blocks"></div>
-
-    <div style="margin-top:20px; display:flex; align-items:center; gap:12px;">
-        <button id="blocks-refresh">Refresh</button>
-        <div id="refresh-count">남은 횟수: 3</div>
-    </div>
-
     <script>
         /* =========================
            기본 설정
