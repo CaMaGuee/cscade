@@ -149,6 +149,14 @@
             }
         }
 
+        #score {
+            color: #ffeb3b;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+            font-size: 14px;
+            font-weight: 600;
+            min-width: 90px;
+        }
+
         #blocks-refresh {
             margin-top: 20px;
             padding: 8px 20px;
@@ -206,9 +214,12 @@
         </div>
         <div id="blocks"></div>
 
-        <div style="margin-top:5px; display:flex; align-items:center; gap:12px;">
+        <div style="margin-top:2px; display:flex; align-items:center; gap:12px;">
             <button id="blocks-refresh">Refresh</button>
-            <div id="refresh-count">남은 횟수: 3</div>
+            <div style="margin-top:10px; display:flex; flex-direction:column; align-items:center;">
+                <div id="score">Score: 0</div>
+                <div id="refresh-count">남은 횟수: 3</div>
+            </div>
         </div>
     </div>
     <script>
@@ -226,6 +237,9 @@
         let offsetY = 0;
 
         let refreshRemain = 3;
+
+        let score = 0;
+        const scoreEl = document.getElementById("score");
 
         let board = Array.from({ length: BOARD_SIZE }, () =>
             Array(BOARD_SIZE).fill(0)
@@ -300,6 +314,14 @@
         }
 
         /* =========================
+           점수 시스템
+        ========================= */
+        function updateScore(value) {
+            score += value;
+            scoreEl.textContent = `Score: ${score}`;
+        }
+
+        /* =========================
            Pointer Events 처리
         ========================= */
         function enablePointer(blockEl, shape, blockIndex) {
@@ -348,6 +370,8 @@
                 const y = cellY - (blockHeight - 1);
 
                 if (canPlace(shape, x, y)) {
+                    updateScore(10); // 블록 배치 점수
+
                     placeBlock(shape, x, y);
                     clearLines();
 
@@ -445,6 +469,8 @@
                     board[y][x] = 0;
                 });
 
+                updateScore(toClear.size * 5);
+
                 render();
             }, 400);
         }
@@ -492,5 +518,6 @@
     </script>
 </body>
 </html>
+
 
 
