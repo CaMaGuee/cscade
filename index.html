@@ -103,7 +103,6 @@
         .block-cell {
             width: 28px;
             height: 28px;
-            background: #ff8a65;
             border-radius: 4px;
             margin: 0px;
             padding: 0px;
@@ -259,6 +258,8 @@
             [[0, 0], [1, 1], [0, 1], [0, 1]],                           // ㄱ
             [[0, 0, 0], [0, 0, 0], [1, 1, 1], [1, 0, 0]],               // 「
             [[0, 0, 0], [0, 0, 0], [0, 0, 1], [1, 1, 1]],               // 』
+            [[0, 0, 0], [0, 0, 0], [0, 0, 1], [0, 1, 1]],               // 』
+            [[0, 0, 0], [0, 0, 0], [0, 1, 1], [0, 1, 0]],               // 』
             [[0, 0, 0], [1, 1, 1], [1, 1, 1], [1, 1, 1]],               // ㅁ
             [[0, 0], [1, 1], [1, 1], [1, 1]],                           // ㅁ
             [[0, 0, 0], [0, 0, 0], [1, 1, 1], [1, 1, 1]],               // ㅁ
@@ -268,6 +269,14 @@
             [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [1, 1, 1, 1]],   // ㅡ
             [[0, 0, 0], [0, 0, 0], [0, 0, 0], [1, 1, 1]],               // ㅡ
             [[0, 0], [0, 0], [0, 0], [1, 1]],                           // ㅡ
+            [[0, 0, 0], [0, 0, 0], [0, 1, 0], [0, 0, 0]],               // .
+            [[0, 0, 0], [0, 0, 0], [0, 1, 1], [1, 1, 0]],               // z
+            [[0, 0, 0], [0, 0, 0], [1, 1, 0], [0, 1, 1]],               // z
+            [[0, 0, 0], [0, 0, 1], [0, 1, 1], [0, 1, 0]],               // z
+            [[0, 0, 0], [0, 1, 0], [0, 1, 1], [0, 0, 1]],               // z
+            [[0, 0, 0], [0, 0, 0], [0, 0, 1], [0, 1, 0]],               // z
+            [[0, 0, 0], [0, 0, 0], [0, 1, 0], [0, 0, 1]],               // z
+
         ];
 
         function getRandomShapes(count) {
@@ -291,7 +300,8 @@
         function createBlocks() {
             blocksEl.innerHTML = "";
 
-            if (currentBlocks.length === 0) {
+            const totalValue = currentBlocks.flatMap(block => block.flat()).reduce((acc, val) => acc + val, 0);
+            if (totalValue < 1) {
                 currentBlocks = getRandomShapes(BLOCK_COUNT);
             }
 
@@ -304,7 +314,8 @@
                 shape.forEach(row => {
                     row.forEach(v => {
                         const c = document.createElement("div");
-                        if (v) c.className = "block-cell";
+                        c.className = "block-cell";      // 모든 셀에 class 부여
+                        c.style.background = v ? "#ff8a65" : "transparent"; // 값에 따라 색상 지정
                         block.appendChild(c);
                     });
                 });
@@ -380,7 +391,9 @@
                     placeBlock(shape, x, y);
                     clearLines();
 
-                    currentBlocks.splice(blockIndex, 1);
+                    currentBlocks[blockIndex] = currentBlocks[blockIndex].map(row =>
+                        row.map(cell => 0)
+                    );
                     createBlocks();
                 }
 
