@@ -41,6 +41,10 @@ function resetTurnTimer(ms) {
         document.querySelectorAll(".cell").forEach(cell => {
             cell.style.background = "#bf360c50";
         });
+
+        document.querySelectorAll(".filled").forEach(cell => {
+            cell.style.background = "#4fc3f7";
+        });
     }, ms);
 
     // 🔢 1초마다 표시용 감소
@@ -420,3 +424,4 @@ window.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+
