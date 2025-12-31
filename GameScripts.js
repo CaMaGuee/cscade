@@ -265,7 +265,7 @@ function enablePointer(blockEl, shape, blockIndex) {
             );
             createBlocks();
             
-            resetTurnTimer(10_000);
+            resetTurnTimer(30_000);
         }
 
         ghost.remove();
