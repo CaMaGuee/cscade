@@ -211,8 +211,8 @@ function enablePointer(blockEl, shape, blockIndex) {
         const blockWidth    = shape[0].length;
         const blockHeight   = shape.length;
 
-        const cellX = Math.floor((e.clientX - rect.left) / cellSize);
-        const cellY = Math.floor((e.clientY - rect.top) / cellSize);
+        const cellX = Math.floor((e.clientX - 14 - rect.left) / cellSize);
+        const cellY = Math.floor((e.clientY - 14 - rect.top) / cellSize);
 
         const x = cellX - (blockWidth - 1);
         const y = cellY - (blockHeight - 1);
@@ -248,8 +248,8 @@ function enablePointer(blockEl, shape, blockIndex) {
         const blockWidth    = shape[0].length;
         const blockHeight   = shape.length;
 
-        const cellX = Math.floor((e.clientX - rect.left) / cellSize);
-        const cellY = Math.floor((e.clientY - rect.top) / cellSize);
+        const cellX = Math.floor((e.clientX - 14 - rect.left) / cellSize);
+        const cellY = Math.floor((e.clientY - 14 - rect.top) / cellSize);
 
         const x = cellX - (blockWidth - 1);
         const y = cellY - (blockHeight - 1);
