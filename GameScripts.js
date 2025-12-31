@@ -9,13 +9,13 @@ function navigate(page){
     if (pageEl) pageEl.style.display = "block";
 }
 
-let turnTimeoutId = null;
-let turnIntervalId = null;
+let turnTimeoutId   = null;
+let turnIntervalId  = null;
 
-let timerDone = false;
-let remainSeconds = 0;
+let timerDone       = false;
+let remainSeconds   = 0;
 
-let timerEl = document.getElementById("turn-timer");
+let timerEl         = document.getElementById("turn-timer");
 
 
 function resetTurnTimer(ms) {
@@ -25,7 +25,7 @@ function resetTurnTimer(ms) {
 
     timerDone = false;
 
-    remainSeconds = Math.ceil(ms / 1000);
+    remainSeconds       = Math.ceil(ms / 1000);
     timerEl.textContent = remainSeconds;
 
     // ⏱️ 실제 종료 타이머 (정확)
@@ -34,9 +34,9 @@ function resetTurnTimer(ms) {
         clearInterval(turnIntervalId);
         timerEl.textContent = "--";
 
-        const startBtn = document.getElementById("blocks-refresh");
-        startBtn.textContent = "게임재시작";
-        startBtn.style.background = "linear-gradient(135deg, #ff7043, #bf360c)";
+        const startBtn              = document.getElementById("blocks-refresh");
+        startBtn.textContent        = "게임재시작";
+        startBtn.style.background   = "linear-gradient(135deg, #ff7043, #bf360c)";
 
         document.querySelectorAll(".cell").forEach(cell => {
             cell.style.background = "#bf360c50";
@@ -64,19 +64,19 @@ function resetTurnTimer(ms) {
 /* =========================
     기본 설정
 ========================= */
-const BOARD_SIZE = 10;
-let boardEl = document.getElementById("board");
-let blocksEl = document.getElementById("blocks");
+const BOARD_SIZE    = 10;
+let boardEl         = document.getElementById("board");
+let blocksEl        = document.getElementById("blocks");
 
-const BLOCK_COUNT = 3;
-let currentBlocks = [];
+const BLOCK_COUNT   = 3;
+let currentBlocks   = [];
 
 let offsetX = 0;
 let offsetY = 0;
 
 let refreshRemain = 3;
 
-let score = 0;
+let score   = 0;
 let scoreEl = document.getElementById("score");
 
 let board = Array.from({ length: BOARD_SIZE }, () =>
@@ -147,15 +147,14 @@ function createBlocks() {
 
     currentBlocks.forEach((shape, index) => {
         const block = document.createElement("div");
-        block.className = "block";
-        block.style.gridTemplateColumns =
-            `repeat(${shape[0].length}, 1fr)`;
+        block.className                 = "block";
+        block.style.gridTemplateColumns = `repeat(${shape[0].length}, 1fr)`;
 
         shape.forEach(row => {
             row.forEach(v => {
-                const c = document.createElement("div");
-                c.className = "block-cell";      // 모든 셀에 class 부여
-                c.style.background = v ? "#ff8a65" : "transparent"; // 값에 따라 색상 지정
+                const c             = document.createElement("div");
+                c.className         = "block-cell";      // 모든 셀에 class 부여
+                c.style.background  = v ? "#ff8a65" : "transparent"; // 값에 따라 색상 지정
                 block.appendChild(c);
             });
         });
@@ -191,8 +190,8 @@ function enablePointer(blockEl, shape, blockIndex) {
 
         ghost = blockEl.cloneNode(true);
         ghost.classList.add("ghost");
-        ghost.style.width = rect.width + "px";
-        ghost.style.height = rect.height + "px";
+        ghost.style.width   = rect.width + "px";
+        ghost.style.height  = rect.height + "px";
 
         document.body.appendChild(ghost);
 
@@ -213,11 +212,11 @@ function enablePointer(blockEl, shape, blockIndex) {
 
         if (!ghost) return;
 
-        const rect = boardEl.getBoundingClientRect();
-        const cellSize = rect.width / BOARD_SIZE;
+        const rect      = boardEl.getBoundingClientRect();
+        const cellSize  = rect.width / BOARD_SIZE;
 
-        const blockWidth = shape[0].length;
-        const blockHeight = shape.length;
+        const blockWidth    = shape[0].length;
+        const blockHeight   = shape.length;
 
         const cellX = Math.floor((e.clientX - rect.left) / cellSize);
         const cellY = Math.floor((e.clientY - rect.top) / cellSize);
@@ -325,15 +324,15 @@ function clearLines() {
         return;
     }
     toClear.forEach(key => {
-        const [x, y] = key.split(",").map(Number);
-        const index = y * BOARD_SIZE + x;
+        const [x, y]    = key.split(",").map(Number);
+        const index     = y * BOARD_SIZE + x;
         boardEl.children[index].classList.add("clearing");
     });
 
     setTimeout(() => {
         toClear.forEach(key => {
-            const [x, y] = key.split(",").map(Number);
-            board[y][x] = 0;
+            const [x, y]    = key.split(",").map(Number);
+            board[y][x]     = 0;
         });
 
         updateScore(toClear.size * 5);
@@ -359,17 +358,16 @@ function render() {
     초기화
 ========================= */
 function initBlockPuzzle(isRestart) {
-    const startBtn = document.getElementById("blocks-refresh");
-    startBtn.textContent = "Refresh";
-    startBtn.style.background = "linear-gradient(135deg, #4fc3f7, #0288d1)";
-
-    timerEl = document.getElementById("turn-timer");
-
-    boardEl = document.getElementById("board");
-    blocksEl = document.getElementById("blocks");
-    scoreEl = document.getElementById("score");
+    const startBtn              = document.getElementById("blocks-refresh");
+    startBtn.textContent        = "Refresh";
+    startBtn.style.background   = "linear-gradient(135deg, #4fc3f7, #0288d1)";
 
     if(!isRestart){
+        timerEl     = document.getElementById("turn-timer");
+        boardEl     = document.getElementById("board");
+        blocksEl    = document.getElementById("blocks");
+        scoreEl     = document.getElementById("score");
+
         createBoard();
     } else {
         score = -500; //라인 클리어시 +500 되는 값 역전치
@@ -424,5 +422,3 @@ window.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
-
-
