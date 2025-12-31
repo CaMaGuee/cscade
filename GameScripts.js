@@ -221,8 +221,8 @@ function enablePointer(blockEl, shape, blockIndex) {
         document.querySelectorAll(".cell").forEach(cell => cell.classList.remove("canPlace"));
 
         // 4️⃣ 놓을 수 있으면 해당 위치 cell에 클래스 추가
-        if (canPlace(currentShape, x, y)) {
-            currentShape.forEach((row, r) => {
+        if (canPlace(shape, x, y)) {
+            shape.forEach((row, r) => {
                 row.forEach((v, c) => {
                     if (v) {
                         const nx = x + c;
