@@ -11,9 +11,9 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico?v=2">
     <link rel="apple-touch-icon" href="favicon_192.png?v=2">
     <link rel="shortcut icon" href="favicon.ico?v=2">
-    <script type="module" src="./router.js"></script>
+    <script src="./GameScripts.js"></script>
     
-    <title>Block Puzzle Game</title>
+    <title>CSGAME</title>
 
     <style>
         @import url('https://cdn.jsdelivr.net/npm/galmuri@latest/dist/galmuri.css');
@@ -221,7 +221,6 @@
         #blocks-refresh:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.35);
-            background: linear-gradient(135deg, #5ad0ff, #039be5);
         }
 
         #blocks-refresh:active {
@@ -253,7 +252,7 @@
 </head>
 
 <body>
-    <img src="favicon.png" style="width:85px;">
+    <a href="https://camaguee.github.io/cscade/"><img src="favicon.png" style="width:85px;"></a>
     <div id="body-wrapper">
         <div class="game-btn-section">
             <div class="game-btn btn-dummy"></div>
@@ -269,9 +268,11 @@
             </div>
             <div id="blocks"></div>
 
-            <div style="margin-top:2px; display:flex; align-items:center; gap:12px;">
+            <div style="margin-top:2px; display:flex; align-items:center; justify-content: center; gap:12px;">
+                <p>남은 시간 :</p>
+                <div id="turn-timer" style="width: 30px; height: 100%; font-size: 20px; font-weight: 700;">--</div>
                 <button id="blocks-refresh">Refresh</button>
-                <div style="margin-top:10px; display:flex; flex-direction:column; align-items:center;">
+                <div style="margin-top:15px; display:flex; flex-direction:column; align-items:center;">
                     <div id="score">Score: 0</div>
                     <div id="refresh-count">남은 횟수: 3</div>
                 </div>
@@ -282,6 +283,13 @@
 <script>
     document.getElementById("BlockPuzzleBtn").addEventListener("click", () => {
         navigate("BlockPuzzle");
+    
+        // 👇 레이아웃이 잡힌 다음 실행
+        requestAnimationFrame(() => {
+            initBlockPuzzle(false);
+        });
     });
+
+    
 </script>
 </html>
