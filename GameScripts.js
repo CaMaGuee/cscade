@@ -37,13 +37,12 @@ function resetTurnTimer(ms) {
         const startBtn              = document.getElementById("blocks-refresh");
         startBtn.textContent        = "게임재시작";
         startBtn.style.background   = "linear-gradient(135deg, #ff7043, #bf360c)";
+        startBtn.disabled           = false;
+        startBtn.style.opacity      = "1";
+        startBtn.style.cursor       = "allowed";
 
         document.querySelectorAll(".cell").forEach(cell => {
-            cell.style.background = "#bf360c50";
-        });
-
-        document.querySelectorAll(".filled").forEach(cell => {
-            cell.style.background = "#4fc3f7";
+            cell.classList.add("game-over-cell");
         });
     }, ms);
 
@@ -205,6 +204,37 @@ function enablePointer(blockEl, shape, blockIndex) {
 
         ghost.style.left = (e.clientX - offsetX) + "px";
         ghost.style.top  = (e.clientY - offsetY) + "px";
+
+        const rect      = boardEl.getBoundingClientRect();
+        const cellSize  = rect.width / BOARD_SIZE;
+
+        const blockWidth    = shape[0].length;
+        const blockHeight   = shape.length;
+
+        const cellX = Math.floor((e.clientX - rect.left) / cellSize);
+        const cellY = Math.floor((e.clientY - rect.top) / cellSize);
+
+        const x = cellX - (blockWidth - 1);
+        const y = cellY - (blockHeight - 1);
+
+        // 3️⃣ 모든 cell에서 canPlace 클래스 제거
+        document.querySelectorAll(".cell").forEach(cell => cell.classList.remove("canPlace"));
+
+        // 4️⃣ 놓을 수 있으면 해당 위치 cell에 클래스 추가
+        if (canPlace(currentShape, x, y)) {
+            currentShape.forEach((row, r) => {
+                row.forEach((v, c) => {
+                    if (v) {
+                        const nx = x + c;
+                        const ny = y + r;
+                        if (nx >= 0 && ny >= 0 && nx < BOARD_SIZE && ny < BOARD_SIZE) {
+                            const index = ny * BOARD_SIZE + nx;
+                            boardEl.children[index].classList.add("canPlace");
+                        }
+                    }
+                });
+            });
+        }
     });
 
     window.addEventListener("pointerup", e => {
@@ -224,7 +254,7 @@ function enablePointer(blockEl, shape, blockIndex) {
         const x = cellX - (blockWidth - 1);
         const y = cellY - (blockHeight - 1);
 
-        if (canPlace(shape, x, y)) {
+        if (canPlace(shape, x, y) && !timerDone) {
             updateScore(10); // 블록 배치 점수
 
             placeBlock(shape, x, y);
@@ -361,7 +391,7 @@ function initBlockPuzzle(isRestart) {
     const startBtn              = document.getElementById("blocks-refresh");
     startBtn.textContent        = "Refresh";
     startBtn.style.background   = "linear-gradient(135deg, #4fc3f7, #0288d1)";
-
+    
     if(!isRestart){
         timerEl     = document.getElementById("turn-timer");
         boardEl     = document.getElementById("board");
@@ -378,16 +408,17 @@ function initBlockPuzzle(isRestart) {
 
         clearLines();
 
+        document.querySelectorAll(".cell").forEach(cell => {
+            cell.classList.remove("game-over-cell");
+        });
+
         refreshRemain = 3;
         const refreshCountEl = document.getElementById("refresh-count");
         refreshCountEl.textContent = `남은 횟수: ${refreshRemain}`;
-
-        document.querySelectorAll(".cell").forEach(cell => {
-            cell.style.background = "#ffffff50";
-        });
     }
 
     createBlocks();
+    render();
 }
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -398,9 +429,6 @@ window.addEventListener("DOMContentLoaded", () => {
         // 🔁 게임 종료 상태면 재시작
         if (timerDone) {
             timerDone = false;
-            refreshBtn.disabled = false;
-            refreshBtn.style.opacity = "1";
-            refreshBtn.style.cursor = "allowed";
             initBlockPuzzle(1);
             return;
         }
