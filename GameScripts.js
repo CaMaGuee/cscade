@@ -37,6 +37,9 @@ function resetTurnTimer(ms) {
         const startBtn = document.getElementById("blocks-refresh");
         startBtn.textContent = "게임재시작";
         startBtn.style.background = "linear-gradient(135deg, #ff7043, #bf360c)";
+
+        const cells = document.getElementsByClassName("cell");
+        cells.style.background = "#bf360c50";
     }, ms);
 
     // 🔢 1초마다 표시용 감소
@@ -375,6 +378,9 @@ function initBlockPuzzle(isRestart) {
         refreshRemain = 3;
         const refreshCountEl = document.getElementById("refresh-count");
         refreshCountEl.textContent = `남은 횟수: ${refreshRemain}`;
+
+        const cells = document.getElementsByClassName("cell");
+        cells.style.background = "#ffffff50";
     }
 
     createBlocks();
@@ -389,7 +395,6 @@ window.addEventListener("DOMContentLoaded", () => {
         if (timerDone) {
             timerDone = false;
             initBlockPuzzle(1);
-            resetTurnTimer(10_000);
             return;
         }
 
