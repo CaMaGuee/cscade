@@ -184,8 +184,8 @@ function enablePointer(blockEl, shape, blockIndex) {
 
         const rect = blockEl.getBoundingClientRect();
 
-        offsetX = rect.width - 14;
-        offsetY = rect.height - 14;
+        offsetX = rect.width + 14;
+        offsetY = rect.height + 14;
 
         ghost = blockEl.cloneNode(true);
         ghost.classList.add("ghost");
