@@ -257,7 +257,7 @@
     <div id="body-wrapper">
         <div class="game-btn-section">
             <div class="game-btn btn-dummy"></div>
-            <button class="game-btn">
+            <button class="game-btn" id="BlockPuzzleBtn">
                 <img src="block_puzzle_icon.png" alt="Block Puzzle">
                 <p>Block Puzzle</p>
             </button>
@@ -280,7 +280,7 @@
     </div>
 </body>
 <script>
-    document.getElementById("BlockPuzzle").addEventListener("click", () => {
+    document.getElementById("BlockPuzzleBtn").addEventListener("click", () => {
         navigate("BlockPuzzle");
     });
 </script>
