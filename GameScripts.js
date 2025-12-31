@@ -28,7 +28,7 @@ function resetTurnTimer(ms) {
     remainSeconds       = Math.ceil(ms / 1000);
     timerEl.textContent = remainSeconds;
 
-    // ⏱️ 실제 종료 타이머 (정확)
+    // 실제 종료 타이머 (정확)
     turnTimeoutId = setTimeout(() => {
         timerDone = true;
         clearInterval(turnIntervalId);
@@ -46,7 +46,7 @@ function resetTurnTimer(ms) {
         });
     }, ms);
 
-    // 🔢 1초마다 표시용 감소
+    // 1초마다 표시용 감소
     turnIntervalId = setInterval(() => {
         remainSeconds--;
         if (remainSeconds <= 0) {
@@ -217,10 +217,10 @@ function enablePointer(blockEl, shape, blockIndex) {
         const x = cellX - (blockWidth - 1);
         const y = cellY - (blockHeight - 1);
 
-        // 3️⃣ 모든 cell에서 canPlace 클래스 제거
+        // 모든 cell에서 canPlace 클래스 제거
         document.querySelectorAll(".cell").forEach(cell => cell.classList.remove("canPlace"));
 
-        // 4️⃣ 놓을 수 있으면 해당 위치 cell에 클래스 추가
+        // 놓을 수 있으면 해당 위치 cell에 클래스 추가
         if (canPlace(shape, x, y) && !timerDone) {
             shape.forEach((row, r) => {
                 row.forEach((v, c) => {
@@ -426,14 +426,14 @@ window.addEventListener("DOMContentLoaded", () => {
     const refreshCountEl = document.getElementById("refresh-count");
 
     refreshBtn.addEventListener("pointerdown", () => {
-        // 🔁 게임 종료 상태면 재시작
+        // 게임 종료 상태면 재시작
         if (timerDone) {
             timerDone = false;
             initBlockPuzzle(1);
             return;
         }
 
-        // 🔄 게임 중이면 블록 리프레시
+        // 게임 중이면 블록 리프레시
         if (refreshRemain <= 0) return;
 
         refreshRemain--;
