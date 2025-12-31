@@ -395,6 +395,11 @@ window.addEventListener("DOMContentLoaded", () => {
         if (timerDone) {
             timerDone = false;
             initBlockPuzzle(1);
+
+            refreshBtn.disabled = false;
+            refreshBtn.style.opacity = "1";
+            refreshBtn.style.cursor = "allowed";
+
             return;
         }
 
