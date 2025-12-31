@@ -413,8 +413,8 @@ function initBlockPuzzle(isRestart) {
         });
 
         refreshRemain = 3;
-        const refreshCountEl = document.getElementById("refresh-count");
-        refreshCountEl.textContent = `남은 횟수: ${refreshRemain}`;
+        const refreshCountEl        = document.getElementById("refresh-count");
+        refreshCountEl.textContent  = `남은 횟수: ${refreshRemain}`;
     }
 
     createBlocks();
@@ -422,8 +422,8 @@ function initBlockPuzzle(isRestart) {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-    const refreshBtn = document.getElementById("blocks-refresh");
-    const refreshCountEl = document.getElementById("refresh-count");
+    const refreshBtn        = document.getElementById("blocks-refresh");
+    const refreshCountEl    = document.getElementById("refresh-count");
 
     refreshBtn.addEventListener("pointerdown", () => {
         // 게임 종료 상태면 재시작
@@ -441,12 +441,12 @@ window.addEventListener("DOMContentLoaded", () => {
         currentBlocks.splice(0, BLOCK_COUNT);
         createBlocks();
 
-        refreshCountEl.textContent = `남은 횟수: ${refreshRemain}`;
+        refreshCountEl.textContent      = `남은 횟수: ${refreshRemain}`;
 
         if (refreshRemain === 0) {
-            refreshBtn.disabled = true;
-            refreshBtn.style.opacity = "0.5";
-            refreshBtn.style.cursor = "not-allowed";
+            refreshBtn.disabled         = true;
+            refreshBtn.style.opacity    = "0.5";
+            refreshBtn.style.cursor     = "not-allowed";
         }
     });
 });
