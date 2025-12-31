@@ -412,6 +412,7 @@ function initBlockPuzzle(isRestart) {
             cell.classList.remove("game-over-cell");
         });
 
+        currentBlocks.splice(0, BLOCK_COUNT);
         refreshRemain = 3;
         const refreshCountEl        = document.getElementById("refresh-count");
         refreshCountEl.textContent  = `남은 횟수: ${refreshRemain}`;
