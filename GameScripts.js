@@ -82,6 +82,13 @@ let board = Array.from({ length: BOARD_SIZE }, () =>
     Array(BOARD_SIZE).fill(0)
 );
 
+const sndPick = new Audio("sounds/pick.ogg");
+const sndDrop = new Audio("sounds/drop.ogg");
+
+// 딜레이 제거 (중요)
+sndPick.preload = "auto";
+sndDrop.preload = "auto";
+
 /* =========================
     블록 정의
 ========================= */
@@ -120,6 +127,20 @@ function getRandomShapes(count) {
     const shuffled = [...blockShapes].sort(() => Math.random() - 0.5);
     return shuffled.slice(0, count);
 }
+
+/* =========================
+    사운드 재생
+========================= */
+function playSound(audio) {
+    audio.pause();
+    audio.currentTime = 0; // 연타 대응
+    audio.play().catch(() => {});
+}
+
+document.addEventListener("pointerdown", () => {
+    sndPick.play().then(() => sndPick.pause());
+    sndDrop.play().then(() => sndDrop.pause());
+}, { once: true });
 
 /* =========================
     보드 생성
@@ -197,6 +218,8 @@ function enablePointer(blockEl, shape, blockIndex) {
         // 최초 위치도 바로 중앙 정렬
         ghost.style.left = (e.clientX - offsetX) + "px";
         ghost.style.top  = (e.clientY - offsetY) + "px";
+
+        playSound(sndPick);
     });
 
     window.addEventListener("pointermove", e => {
@@ -270,6 +293,8 @@ function enablePointer(blockEl, shape, blockIndex) {
 
         ghost.remove();
         ghost = null;
+
+        playSound(sndDrop);
     });
 
     blockEl.addEventListener("pointercancel", () => {
