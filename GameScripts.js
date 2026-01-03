@@ -82,8 +82,8 @@ let board = Array.from({ length: BOARD_SIZE }, () =>
     Array(BOARD_SIZE).fill(0)
 );
 
-const sndPick = new Audio("sounds/pick.ogg");
-const sndDrop = new Audio("sounds/drop.ogg");
+const sndPick = new Audio("pick.ogg");
+const sndDrop = new Audio("drop.ogg");
 
 // 딜레이 제거 (중요)
 sndPick.preload = "auto";
