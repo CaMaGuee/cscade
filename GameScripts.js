@@ -185,6 +185,7 @@ function createBlocks() {
 
     const totalValue = currentBlocks.flatMap(block => block.flat()).reduce((acc, val) => acc + val, 0);
     if (totalValue < 1) {
+        playSound(sndPick);
         currentBlocks = getRandomShapes(BLOCK_COUNT);
     }
 
@@ -401,6 +402,13 @@ function clearLines() {
         render();
         return;
     }
+    
+    sndDrop.pause();
+    sndDrop.currentTime = 0;
+    sndlevelUp.pause();
+    sndlevelUp.currentTime = 1.5;
+    sndlevelUp.play().catch(() => {});
+
     toClear.forEach(key => {
         const [x, y]    = key.split(",").map(Number);
         const index     = y * BOARD_SIZE + x;
@@ -414,11 +422,6 @@ function clearLines() {
         });
 
         updateScore(toClear.size * 5);
-
-        sndDrop.pause();
-        sndDrop.currentTime = 0;
-        playSound(levelUp);
-
         render();
     }, 400);
 }
