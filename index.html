@@ -294,12 +294,7 @@
     
         // 👇 레이아웃이 잡힌 다음 실행
         requestAnimationFrame(() => {
-            await sndLose.play();
-            sndLose.pause();
-            sndLose.currentTime = 0;
-            await sndStart.play();
-            sndStart.pause();
-            sndStart.currentTime = 0;
+            
             initBlockPuzzle(false);
         });
     });
