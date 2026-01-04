@@ -403,17 +403,14 @@ function clearLines() {
         render();
         return;
     }
-    
-    sndDrop.pause();
-    sndDrop.currentTime = 0;
+
+    playSound(sndlevelUpShort);
 
     toClear.forEach(key => {
         const [x, y]    = key.split(",").map(Number);
         const index     = y * BOARD_SIZE + x;
         boardEl.children[index].classList.add("clearing");
     });
-
-    playSound(sndlevelUpShort);
     
     setTimeout(() => {
         toClear.forEach(key => {
