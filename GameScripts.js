@@ -31,6 +31,7 @@ function resetTurnTimer(ms) {
 
     // 실제 종료 타이머 (정확)
     turnTimeoutId = setTimeout(() => {
+        playSound(sndLose);
         timerDone = true;
         clearInterval(turnIntervalId);
         timerEl.textContent = "--";
@@ -45,8 +46,6 @@ function resetTurnTimer(ms) {
         document.querySelectorAll(".cell").forEach(cell => {
             cell.classList.add("game-over-cell");
         });
-
-        playSound(sndLose);
     }, ms);
 
     // 1초마다 표시용 감소
@@ -409,6 +408,7 @@ function clearLines() {
     });
 
     setTimeout(() => {
+        playSound(levelUp);
         toClear.forEach(key => {
             const [x, y]    = key.split(",").map(Number);
             board[y][x]     = 0;
