@@ -164,6 +164,9 @@ document.addEventListener("pointerdown", () => {
 
     sounds.forEach(audio => {
         audio.muted = true;
+    });
+
+    sounds.forEach(audio => {
         audio.play().then(() => {
             audio.pause();
             audio.currentTime = 0;
