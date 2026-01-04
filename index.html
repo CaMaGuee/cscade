@@ -273,6 +273,39 @@
 
 <body>
     <a href="https://camaguee.github.io/cscade/"><img src="favicon.png" style="width:85px;"></a>
+    <div id="installBtn-body" style="width: 100%; height: 100%;">
+        <button id="installBtn" style="
+            position:fixed;
+            right:10px;
+            top:10px;
+            background: none;
+            border: none;
+            padding: 0;
+            outline: none;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+        ">앱 설치</button>
+        
+        <div id="iosPopup" style="display:none; position:fixed; inset:0; background:#0008;">
+            <div style="
+                background:#1f274f;
+                color:white;
+                padding:20px;
+                border-radius:8px;
+                width:260px;
+                margin:40% auto;
+                text-align:center;
+            ">
+                <p>Safari 하단의</p>
+                <p><b>공유 버튼</b>을 누른 후</p>
+                <p><b>“홈 화면에 추가”</b>를 선택해주세요.</p>
+                <button onclick="this.parentElement.parentElement.style.display='none'">
+                    확인
+                </button>
+            </div>
+        </div>
+    </div>
     <div id="body-wrapper">
         <div class="game-btn-section-body">
             <div class="game-btn-section">
@@ -281,40 +314,6 @@
                     <img src="block_puzzle_icon.png" alt="Block Puzzle">
                     <p>Block Puzzle</p>
                 </button>
-            </div>
-        </div>
-
-        <div id="installBtn-body" style="width: 100%; height: 100%;">
-            <button id="installBtn" style="
-                position:fixed;
-                right:10px;
-                top:10px;
-                background: none;
-                border: none;
-                padding: 0;
-                outline: none;
-                color: white;
-                font-size: 14px;
-                font-weight: 500;
-            ">앱 설치</button>
-            
-            <div id="iosPopup" style="display:none; position:fixed; inset:0; background:#0008;">
-                <div style="
-                    background:#1f274f;
-                    color:white;
-                    padding:20px;
-                    border-radius:8px;
-                    width:260px;
-                    margin:40% auto;
-                    text-align:center;
-                ">
-                    <p>Safari 하단의</p>
-                    <p><b>공유 버튼</b>을 누른 후</p>
-                    <p><b>“홈 화면에 추가”</b>를 선택해주세요.</p>
-                    <button onclick="this.parentElement.parentElement.style.display='none'">
-                        확인
-                    </button>
-                </div>
             </div>
         </div>
 
