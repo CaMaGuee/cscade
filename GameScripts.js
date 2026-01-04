@@ -82,12 +82,16 @@ let board = Array.from({ length: BOARD_SIZE }, () =>
     Array(BOARD_SIZE).fill(0)
 );
 
-const sndPick = new Audio("pick.ogg");
-const sndDrop = new Audio("drop.ogg");
+const sndPick = new Audio("pick.wav");
+const sndDrop = new Audio("drop.wav");
+const sndLose = new Audio("lose.wav");
+const sndStart = new Audio("restart.wav");
 
 // 딜레이 제거 (중요)
 sndPick.preload = "auto";
 sndDrop.preload = "auto";
+sndLose.preload = "auto";
+sndStart.preload = "auto";
 
 /* =========================
     블록 정의
@@ -140,6 +144,8 @@ function playSound(audio) {
 document.addEventListener("pointerdown", () => {
     sndPick.play().then(() => sndPick.pause());
     sndDrop.play().then(() => sndDrop.pause());
+    sndLose.play().then(() => sndLose.pause());
+    sndStart.play().then(() => sndStart.pause());
 }, { once: true });
 
 /* =========================
