@@ -44,6 +44,9 @@ function resetTurnTimer(ms) {
         document.querySelectorAll(".cell").forEach(cell => {
             cell.classList.add("game-over-cell");
         });
+
+        sndLose.currentTime = 0;
+        sndLose.play();
     }, ms);
 
     // 1초마다 표시용 감소
@@ -449,6 +452,8 @@ function initBlockPuzzle(isRestart) {
         refreshCountEl.textContent  = `남은 횟수: ${refreshRemain}`;
     }
 
+    sndStart.currentTime = 0;
+    sndStart.play();
     createBlocks();
     render();
 }
