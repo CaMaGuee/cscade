@@ -147,18 +147,29 @@ function getRandomShapes(count) {
     사운드 재생
 ========================= */
 function playSound(audio) {
-    audio.pause;
+    audio.pause();
     audio.currentTime = 0; // 연타 대응
     audio.play().catch(() => {});
 }
 
 document.addEventListener("pointerdown", () => {
-    sndPick.play().then(() => sndPick.pause());
-    sndDrop.play().then(() => sndDrop.pause());
-    sndLose.play().then(() => sndLose.pause());
-    sndStart.play().then(() => sndStart.pause());
-    sndtimeOut.play().then(() => sndtimeOut.pause());
-    sndlevelUp.play().then(() => sndlevelUp.pause());
+    const sounds = [
+        sndPick,
+        sndDrop,
+        sndLose,
+        sndStart,
+        sndtimeOut,
+        sndlevelUp
+    ];
+
+    sounds.forEach(audio => {
+        audio.muted = true;
+        audio.play().then(() => {
+            audio.pause();
+            audio.currentTime = 0;
+            audio.muted = false;
+        });
+    });
 }, { once: true });
 
 /* =========================
