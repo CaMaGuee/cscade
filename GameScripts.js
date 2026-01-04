@@ -439,13 +439,10 @@ function clearLines() {
         boardEl.children[index].classList.add("clearing");
     });
 
-    if(isIOS()){
-        playAudioContext(audioBufflevelUp, 1.5);
-    } else {
-        sndlevelUp.pause();
-        sndlevelUp.currentTime = 1.5;
-        sndlevelUp.play().catch(() => {});
-    }
+    playAudioContext(audioBufflevelUp, 1.5);
+    //sndlevelUp.pause();
+    //sndlevelUp.currentTime = 1.5;
+    //sndlevelUp.play().catch(() => {});
 
     setTimeout(() => {
         toClear.forEach(key => {
