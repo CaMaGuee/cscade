@@ -296,13 +296,23 @@
                 width:260px;
                 margin:40% auto;
                 text-align:center;
+                font-weight: 14px;
             ">
                 <p>Safari 하단의</p>
-                <p><b>공유 버튼</b>을 누른 후</p>
-                <p><b>“홈 화면에 추가”</b>를 선택해주세요.</p>
-                <button onclick="this.parentElement.parentElement.style.display='none'">
-                    확인
-                </button>
+                <p><b>"···" - "공유 버튼"</b>을 누른 후</p>
+                <p><b>“더보기" - "홈 화면에 추가”</b>를 선택해주세요.</p>
+                <button onclick="this.parentElement.parentElement.style.display='none'" style="
+                    position:fixed;
+                    right:10px;
+                    top:10px;
+                    background: none;
+                    border: none;
+                    padding: 0;
+                    outline: none;
+                    color: white;
+                    font-size: 14px;
+                    font-weight: 500;
+                ">확인</button>
             </div>
         </div>
     </div>
