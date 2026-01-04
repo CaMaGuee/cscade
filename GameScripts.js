@@ -147,6 +147,7 @@ function getRandomShapes(count) {
     사운드 재생
 ========================= */
 function playSound(audio) {
+    audio.pause;
     audio.currentTime = 0; // 연타 대응
     audio.play().catch(() => {});
 }
