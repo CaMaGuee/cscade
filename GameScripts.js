@@ -88,7 +88,7 @@ let board = Array.from({ length: BOARD_SIZE }, () =>
 const sndPick = new Audio("pick.wav");
 const sndDrop = new Audio("drop.wav");
 const sndLose = new Audio("lose.wav");
-const sndStart = new Audio("restart.wav");
+const sndStart = new Audio("gamestart.wav");
 
 // 딜레이 제거 (중요)
 sndPick.preload = "auto";
