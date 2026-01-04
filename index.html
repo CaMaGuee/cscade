@@ -49,8 +49,14 @@
             font-family: inherit;
         }
 
+        .game-btn-section-body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 70svh;
+        }
+
         .game-btn-section {
-            margin-top: 5%;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 12px; /* 간격은 필요에 따라 조절 */
@@ -268,12 +274,14 @@
 <body>
     <a href="https://camaguee.github.io/cscade/"><img src="favicon.png" style="width:85px;"></a>
     <div id="body-wrapper">
-        <div class="game-btn-section">
-            <div class="game-btn btn-dummy"></div>
-            <button class="game-btn" id="BlockPuzzleBtn">
-                <img src="block_puzzle_icon.png" alt="Block Puzzle">
-                <p>Block Puzzle</p>
-            </button>
+        <div class="game-btn-section-body">
+            <div class="game-btn-section">
+                <div class="game-btn btn-dummy"></div>
+                <button class="game-btn" id="BlockPuzzleBtn">
+                    <img src="block_puzzle_icon.png" alt="Block Puzzle">
+                    <p>Block Puzzle</p>
+                </button>
+            </div>
         </div>
 
         <div class="SPA_PAGE" id="BlockPuzzle">
