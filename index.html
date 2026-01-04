@@ -284,6 +284,37 @@
             </div>
         </div>
 
+        <div id="installBtn-body" style="position:fixed; right:3%; bottom:3%;">
+            <button id="installBtn" style="
+                background: none;
+                border: none;
+                padding: 0;
+                outline: none;
+                color: white;
+                font-size: 14px;
+                font-weight: 500;
+            ">앱 설치</button>
+            
+            <div id="iosPopup" style="display:none; position:fixed; inset:0; background:#0008;">
+                <div style="
+                    background:#1f274f;
+                    color:white;
+                    padding:20px;
+                    border-radius:8px;
+                    width:260px;
+                    margin:40% auto;
+                    text-align:center;
+                ">
+                    <p>Safari 하단의</p>
+                    <p><b>공유 버튼</b>을 누른 후</p>
+                    <p><b>“홈 화면에 추가”</b>를 선택해주세요.</p>
+                    <button onclick="this.parentElement.parentElement.style.display='none'">
+                        확인
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <div class="SPA_PAGE" id="BlockPuzzle">
             <div id="board-body">
                 <div id="board"></div>
@@ -303,6 +334,50 @@
     </div>
 </body>
 <script>
+    function isIOS(){
+        return /iphone|ipad|iod/i.test(navigator.userAgent);
+    }
+    
+    function isStandalone(){
+        return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+    }
+
+    let deferredPrompt = null;
+
+    if(isStandalone()){
+        document.getElementById("installBtn-body").style.display = "none";
+    } else {
+        document.getElementById("installBtn-body").style.display = "block";
+    }
+
+    window.addEventListener("beforeinstallprompt", (e) => {
+        e.preventDefault(); //자동 팝업 차단
+        deferredPrompt = e; //나중에 사용
+    })
+
+    document.getElementById("installBtn").addEventListener("pointerup", async () => {
+
+        //이미 설치됨
+        if(isStandalone()) {
+            return;
+        }
+
+        if(isIOS()){
+            document.getElementById("iosPopup").style.display = "block";
+            return;
+        } else {
+            if(deferredPrompt){
+                deferredPrompt.prompt();
+
+                const {outcome} = await deferredPrompt.userChoice;
+                deferredPrompt = null;
+                return;
+            }
+        }
+
+        alert("이 브라우저는 설치를 지원하지 않습니다.");
+    })
+
     document.getElementById("BlockPuzzleBtn").addEventListener("click", () => {
         navigate("BlockPuzzle");
     
