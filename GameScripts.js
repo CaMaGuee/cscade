@@ -466,7 +466,6 @@ window.addEventListener("DOMContentLoaded", () => {
         // 게임 종료 상태면 재시작
         if (timerDone) {
             timerDone = false;
-            playSound(sndStart);
             initBlockPuzzle(1);
             return;
         }
