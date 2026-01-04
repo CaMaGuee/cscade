@@ -1,4 +1,5 @@
 let currentDestroy = null;
+let audioUnlocked = false;      //사운드 언락용
 
 function navigate(page){ 
     document.querySelectorAll(".game-btn-section-body").forEach(p => {
@@ -147,27 +148,22 @@ function getRandomShapes(count) {
     사운드 재생
 ========================= */
 function playSound(audio) {
+    if (!audioUnlocked) return;
+
     audio.pause();
-    audio.currentTime = 0; // 연타 대응
+    audio.currentTime = 0;
     audio.play().catch(() => {});
 }
 
-document.addEventListener("pointerdown", () => {
-    const sounds = [
-        sndPick,
-        sndDrop,
-        sndLose,
-        sndStart,
-        sndtimeOut,
-        sndlevelUp
-    ];
 
-    sounds.forEach(audio => {
-        audio.play().then(() => {
-            audio.pause();
-            audio.currentTime = 0;
-        });
-    });
+document.addEventListener("pointerdown", () => {
+    if (audioUnlocked) return;
+
+    audioUnlocked = true;
+
+    const silent = new Audio();
+    silent.src = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=";
+    silent.play().catch(() => {});
 }, { once: true });
 
 /* =========================
