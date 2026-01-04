@@ -156,8 +156,8 @@ document.addEventListener("pointerdown", () => {
     sndDrop.play().then(() => sndDrop.pause());
     sndLose.play().then(() => sndLose.pause());
     sndStart.play().then(() => sndStart.pause());
-    sndtimeOut.play().then(() => sndStart.pause());
-    sndlevelUp.play().then(() => sndStart.pause());
+    sndtimeOut.play().then(() => sndtimeOut.pause());
+    sndlevelUp.play().then(() => sndlevelUp.pause());
 }, { once: true });
 
 /* =========================
