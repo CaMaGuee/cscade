@@ -88,15 +88,13 @@ let board = Array.from({ length: BOARD_SIZE }, () =>
     Array(BOARD_SIZE).fill(0)
 );
 
-let audioCtx;           // Safari 사운드 정책 회피 (중간 지점 음원 재생)
-let audioBufflevelUp;   // audio context 용 사운드 버퍼 
-
-const sndPick       = new Audio("pick.wav");
-const sndDrop       = new Audio("drop.wav");
-const sndLose       = new Audio("lose.wav");
-const sndStart      = new Audio("gamestart.wav");
-const sndtimeOut    = new Audio("timeOut.wav");
-const sndlevelUp    = new Audio("levelUp.wav");
+const sndPick         = new Audio("pick.wav");
+const sndDrop         = new Audio("drop.wav");
+const sndLose         = new Audio("lose.wav");
+const sndStart        = new Audio("gamestart.wav");
+const sndtimeOut      = new Audio("timeOut.wav");
+const sndlevelUp      = new Audio("levelUp.wav");
+const sndlevelUpShort = new Audio("levelUpShort.wav");
 
 // 딜레이 제거 (중요)
 sndPick.preload         = "auto";
@@ -105,6 +103,7 @@ sndLose.preload         = "auto";
 sndStart.preload        = "auto";
 sndtimeOut.preload      = "auto";
 sndlevelUp.preload      = "auto";
+sndlevelUpShort.preload = "auto";
 
 
 /* =========================
@@ -157,35 +156,10 @@ function playSound(audio) {
     audio.play().catch(() => {});
 }
 
-function initAudioContext() {
-    if (audioCtx) return;
-
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-    fetch("levelUp.wav")
-        .then(res => res.arrayBuffer())
-        .then(buf => audioCtx.decodeAudioData(buf))
-        .then(decoded => {
-            levelUpBuffer = decoded;
-        });
-}
-
-function playAudioContext(audio, offsetSec) {
-    if (!audio || !audioCtx) return;
-
-    const source = audioCtx.createBufferSource();
-    source.buffer = audio;
-    source.connect(audioCtx.destination);
-
-    source.start(0, offsetSec);
-}
-
 document.addEventListener("pointerdown", () => {
     if (audioUnlocked) return;
 
     audioUnlocked = true;
-
-    initAudioContext();
 
     const silent = new Audio();
     silent.src = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=";
@@ -439,11 +413,8 @@ function clearLines() {
         boardEl.children[index].classList.add("clearing");
     });
 
-    playAudioContext(audioBufflevelUp, 1.5);
-    //sndlevelUp.pause();
-    //sndlevelUp.currentTime = 1.5;
-    //sndlevelUp.play().catch(() => {});
-
+    playSound(sndlevelUpShort);
+    
     setTimeout(() => {
         toClear.forEach(key => {
             const [x, y]    = key.split(",").map(Number);
