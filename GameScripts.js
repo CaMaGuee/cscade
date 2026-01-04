@@ -408,13 +408,16 @@ function clearLines() {
     });
 
     setTimeout(() => {
-        playSound(levelUp);
         toClear.forEach(key => {
             const [x, y]    = key.split(",").map(Number);
             board[y][x]     = 0;
         });
 
         updateScore(toClear.size * 5);
+
+        sndDrop.pause();
+        sndDrop.currentTime = 0;
+        playSound(levelUp);
 
         render();
     }, 400);
