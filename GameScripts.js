@@ -147,7 +147,6 @@ function getRandomShapes(count) {
     사운드 재생
 ========================= */
 function playSound(audio) {
-    audio.pause();
     audio.currentTime = 0; // 연타 대응
     audio.play().catch(() => {});
 }
@@ -157,6 +156,8 @@ document.addEventListener("pointerdown", () => {
     sndDrop.play().then(() => sndDrop.pause());
     sndLose.play().then(() => sndLose.pause());
     sndStart.play().then(() => sndStart.pause());
+    sndtimeOut.play().then(() => sndStart.pause());
+    sndlevelUp.play().then(() => sndStart.pause());
 }, { once: true });
 
 /* =========================
@@ -216,6 +217,8 @@ function enablePointer(blockEl, shape, blockIndex) {
     let ghost = null;
 
     blockEl.addEventListener("pointerdown", e => {
+        playSound(sndPick);
+
         e.preventDefault();
 
         blockEl.setPointerCapture(e.pointerId);
@@ -235,8 +238,6 @@ function enablePointer(blockEl, shape, blockIndex) {
         // 최초 위치도 바로 중앙 정렬
         ghost.style.left = (e.clientX - offsetX) + "px";
         ghost.style.top  = (e.clientY - offsetY) + "px";
-
-        playSound(sndPick);
     });
 
     window.addEventListener("pointermove", e => {
@@ -295,6 +296,8 @@ function enablePointer(blockEl, shape, blockIndex) {
         const y = cellY - (blockHeight - 1);
 
         if (canPlace(shape, x, y) && !timerDone) {
+            playSound(sndDrop);
+
             updateScore(10); // 블록 배치 점수
 
             placeBlock(shape, x, y);
@@ -310,8 +313,6 @@ function enablePointer(blockEl, shape, blockIndex) {
 
         ghost.remove();
         ghost = null;
-
-        playSound(sndDrop);
     });
 
     blockEl.addEventListener("pointercancel", () => {
