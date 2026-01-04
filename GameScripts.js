@@ -463,7 +463,6 @@ function initBlockPuzzle(isRestart) {
         refreshCountEl.textContent  = `남은 횟수: ${refreshRemain}`;
     }
 
-    sndStart.currentTime = 0;
     createBlocks();
     render();
 }
@@ -485,12 +484,12 @@ window.addEventListener("DOMContentLoaded", () => {
 
         refreshRemain--;
 
+        playSound(sndDrop);
+
         currentBlocks.splice(0, BLOCK_COUNT);
         createBlocks();
 
         refreshCountEl.textContent      = `남은 횟수: ${refreshRemain}`;
-
-        playSound(sndDrop);
 
         if (refreshRemain === 0) {
             refreshBtn.disabled         = true;
