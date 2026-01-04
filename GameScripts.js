@@ -88,6 +88,9 @@ let board = Array.from({ length: BOARD_SIZE }, () =>
     Array(BOARD_SIZE).fill(0)
 );
 
+let audioCtx;           // Safari 사운드 정책 회피 (중간 지점 음원 재생)
+let audioBufflevelUp;   // audio context 용 사운드 버퍼 
+
 const sndPick       = new Audio("pick.wav");
 const sndDrop       = new Audio("drop.wav");
 const sndLose       = new Audio("lose.wav");
@@ -154,11 +157,35 @@ function playSound(audio) {
     audio.play().catch(() => {});
 }
 
+function initAudioContext() {
+    if (audioCtx) return;
+
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    fetch("levelUp.wav")
+        .then(res => res.arrayBuffer())
+        .then(buf => audioCtx.decodeAudioData(buf))
+        .then(decoded => {
+            levelUpBuffer = decoded;
+        });
+}
+
+function playAudioContext(audio, offsetSec) {
+    if (!audio || !audioCtx) return;
+
+    const source = audioCtx.createBufferSource();
+    source.buffer = audio;
+    source.connect(audioCtx.destination);
+
+    source.start(0, offsetSec);
+}
 
 document.addEventListener("pointerdown", () => {
     if (audioUnlocked) return;
 
     audioUnlocked = true;
+
+    initAudioContext();
 
     const silent = new Audio();
     silent.src = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=";
@@ -405,15 +432,20 @@ function clearLines() {
     
     sndDrop.pause();
     sndDrop.currentTime = 0;
-    sndlevelUp.pause();
-    sndlevelUp.currentTime = 1.5;
-    sndlevelUp.play().catch(() => {});
 
     toClear.forEach(key => {
         const [x, y]    = key.split(",").map(Number);
         const index     = y * BOARD_SIZE + x;
         boardEl.children[index].classList.add("clearing");
     });
+
+    if(isIOS()){
+        playAudioContext(audioBufflevelUp, 1.5);
+    } else {
+        sndlevelUp.pause();
+        sndlevelUp.currentTime = 1.5;
+        sndlevelUp.play().catch(() => {});
+    }
 
     setTimeout(() => {
         toClear.forEach(key => {
