@@ -466,6 +466,7 @@ window.addEventListener("DOMContentLoaded", () => {
         // 게임 종료 상태면 재시작
         if (timerDone) {
             timerDone = false;
+            playSound(sndStart);
             initBlockPuzzle(1);
             return;
         }
@@ -479,6 +480,8 @@ window.addEventListener("DOMContentLoaded", () => {
         createBlocks();
 
         refreshCountEl.textContent      = `남은 횟수: ${refreshRemain}`;
+
+        playSound(sndDrop);
 
         if (refreshRemain === 0) {
             refreshBtn.disabled         = true;
