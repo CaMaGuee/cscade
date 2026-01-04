@@ -45,13 +45,16 @@ function resetTurnTimer(ms) {
             cell.classList.add("game-over-cell");
         });
 
-        sndLose.currentTime = 0;
-        sndLose.play();
+        playSound(sndLose);
     }, ms);
 
     // 1초마다 표시용 감소
     turnIntervalId = setInterval(() => {
         remainSeconds--;
+        if (remainSeconds <= 10) {
+            playSound(sndtimeOut);
+        }
+
         if (remainSeconds <= 0) {
             remainSeconds = 0;
             clearInterval(turnIntervalId);
@@ -85,16 +88,21 @@ let board = Array.from({ length: BOARD_SIZE }, () =>
     Array(BOARD_SIZE).fill(0)
 );
 
-const sndPick = new Audio("pick.wav");
-const sndDrop = new Audio("drop.wav");
-const sndLose = new Audio("lose.wav");
-const sndStart = new Audio("gamestart.wav");
+const sndPick       = new Audio("pick.wav");
+const sndDrop       = new Audio("drop.wav");
+const sndLose       = new Audio("lose.wav");
+const sndStart      = new Audio("gamestart.wav");
+const sndtimeOut    = new Audio("timeOut.wav");
+const sndlevelUp    = new Audio("levelUp.wav");
 
 // 딜레이 제거 (중요)
-sndPick.preload = "auto";
-sndDrop.preload = "auto";
-sndLose.preload = "auto";
-sndStart.preload = "auto";
+sndPick.preload         = "auto";
+sndDrop.preload         = "auto";
+sndLose.preload         = "auto";
+sndStart.preload        = "auto";
+sndtimeOut.preload      = "auto";
+sndlevelUp.preload      = "auto";
+
 
 /* =========================
     블록 정의
@@ -297,7 +305,7 @@ function enablePointer(blockEl, shape, blockIndex) {
             );
             createBlocks();
             
-            resetTurnTimer(30_000);
+            resetTurnTimer(25_000);
         }
 
         ghost.remove();
@@ -426,6 +434,8 @@ function initBlockPuzzle(isRestart) {
     startBtn.textContent        = "Refresh";
     startBtn.style.background   = "linear-gradient(135deg, #4fc3f7, #0288d1)";
     
+    sndStart.play();
+
     if(!isRestart){
         timerEl     = document.getElementById("turn-timer");
         boardEl     = document.getElementById("board");
@@ -453,7 +463,6 @@ function initBlockPuzzle(isRestart) {
     }
 
     sndStart.currentTime = 0;
-    sndStart.play();
     createBlocks();
     render();
 }

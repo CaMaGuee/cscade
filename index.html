@@ -26,6 +26,12 @@
             background:#2f3b6a; 
             overflow: hidden;   /* ← 스크롤 완전 차단 */
             font-family: 'Galmuri9', monospace;
+            
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
         html::-webkit-scrollbar { width:0px; background:transparent; }
         html { scrollbar-width:none; -ms-overflow-style:none; }
