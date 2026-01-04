@@ -1,7 +1,7 @@
 let currentDestroy = null;
 
 function navigate(page){ 
-    document.querySelectorAll(".game-btn-section").forEach(p => {
+    document.querySelectorAll(".game-btn-section-body").forEach(p => {
         p.style.display = "none";
     });
 
