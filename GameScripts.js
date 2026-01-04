@@ -164,9 +164,7 @@ document.addEventListener("pointerdown", () => {
 
     sounds.forEach(audio => {
         audio.muted = true;
-    });
 
-    sounds.forEach(audio => {
         audio.play().then(() => {
             audio.pause();
             audio.currentTime = 0;
@@ -450,7 +448,7 @@ function initBlockPuzzle(isRestart) {
     startBtn.textContent        = "Refresh";
     startBtn.style.background   = "linear-gradient(135deg, #4fc3f7, #0288d1)";
     
-    sndStart.play();
+    playSound(sndStart);
 
     if(!isRestart){
         timerEl     = document.getElementById("turn-timer");
