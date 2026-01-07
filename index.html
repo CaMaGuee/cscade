@@ -114,6 +114,23 @@
             box-shadow: inset 0 6px 14px rgba(0, 0, 0, 0.25);
         }
 
+        #board-2048-body {
+            width: 370px;
+            height: 370px;
+
+            display: flex;
+            flex-direction: row;
+
+            justify-content: center;
+            align-items: center;
+
+            background-color: #1f274f;
+            border-radius: 6px;
+
+            overflow: hidden;
+            box-shadow: inset 0 6px 14px rgba(0, 0, 0, 0.25);
+        }
+
         #board {
             display: grid;
             grid-template-columns: repeat(10, 1fr);
@@ -123,9 +140,25 @@
             border-radius: 6px;
         }
 
+        #board-2048 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            background: #1f274f;
+            touch-action: none;
+            border-radius: 6px;
+        }
+
         .cell {
             width: 32px;
             height: 32px;
+            background: #ffffff50;
+            border-radius: 4px;
+        }
+
+        .cell-2048 {
+            width: 80px;
+            height: 80px;
             background: #ffffff50;
             border-radius: 4px;
         }
@@ -273,7 +306,7 @@
 
 <body>
     <a href="https://camaguee.github.io/cscade/"><img src="favicon.png" style="width:85px;"></a>
-    <div id="installBtn-body" style="width: 100%; height: 100%; z-index: 9999;">
+    <div id="installBtn-body" style="z-index: 9999;">
         <button id="installBtn" style="
             position:fixed;
             right:10px;
@@ -317,10 +350,14 @@
     <div id="body-wrapper">
         <div class="game-btn-section-body">
             <div class="game-btn-section">
-                <div class="game-btn btn-dummy"></div>
                 <button class="game-btn" id="BlockPuzzleBtn">
                     <img src="block_puzzle_icon.png" alt="Block Puzzle">
-                    <p>Block Puzzle</p>
+                    <p>Block<br>Puzzle</p>
+                </button>
+                <div class="game-btn btn-dummy"></div>
+                <button class="game-btn" id="Block2048Btn">
+                    <img src="block_2048_icon.png" alt="Block Puzzle">
+                    <p><br>2048</p>
                 </button>
             </div>
         </div>
@@ -338,6 +375,29 @@
                 <div style="margin-top:15px; display:flex; flex-direction:column; align-items:center;">
                     <div id="score">Score: 0</div>
                     <div id="refresh-count">남은 횟수: 3</div>
+                </div>
+            </div>
+        </div>
+        <div class="SPA_PAGE" id="block2048">
+            <div id="board-2048-body">
+                <div id="board-2048"></div>
+            </div>
+            <div style="display: flex; justify-content: center; align-items: center;">
+                <div style="margin-top:20px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+                    <div></div>
+                    <button id="up-btn" style="width: 80px; height: 80px; background: #fff; border: none; padding: 0; cursor: pointer;">
+                    
+                    </button>
+                    <div></div>
+                    <button id="left-btn" style="width: 80px; height: 80px; background: #fff; border: none; padding: 0; cursor: pointer;">
+                    
+                    </button>
+                    <button id="down-btn" style="width: 80px; height: 80px; background: #fff; border: none; padding: 0; cursor: pointer;">
+                    
+                    </button>
+                    <button id="right-btn" style="width: 80px; height: 80px; background: #fff; border: none; padding: 0; cursor: pointer;">
+                    
+                    </button>
                 </div>
             </div>
         </div>
@@ -396,7 +456,13 @@
             initBlockPuzzle(false);
         });
     });
-
+    document.getElementById("Block2048Btn").addEventListener("click", () => {
+        navigate("block2048");
     
+        // 👇 레이아웃이 잡힌 다음 실행
+        requestAnimationFrame(() => {
+            initBlock2048();
+        });
+    });
 </script>
 </html>

@@ -2,6 +2,10 @@ let currentDestroy = null;
 let audioUnlocked = false;      //사운드 언락용
 
 function navigate(page){ 
+    document.querySelectorAll(".SPA_PAGE").forEach(p => {
+        p.style.display = "none";
+    });
+
     document.querySelectorAll(".game-btn-section-body").forEach(p => {
         p.style.display = "none";
     });
@@ -63,15 +67,15 @@ function resetTurnTimer(ms) {
     }, 1000);
 }
 
-
-
-/* =========================BlockPuzzle========================= */
 /* =========================
     기본 설정
 ========================= */
 const BOARD_SIZE    = 10;
 let boardEl         = document.getElementById("board");
 let blocksEl        = document.getElementById("blocks");
+
+const BLOCK_2048_SIZE   = 4;
+let board2048El         = document.getElementById("board-2048");
 
 const BLOCK_COUNT   = 3;
 let currentBlocks   = [];
@@ -105,7 +109,7 @@ sndtimeOut.preload      = "auto";
 sndlevelUp.preload      = "auto";
 sndlevelUpShort.preload = "auto";
 
-
+/* =========================BlockPuzzle========================= */
 /* =========================
     블록 정의
 ========================= */
@@ -507,3 +511,30 @@ window.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+
+/* ============================2048============================ */
+/* =========================
+    보드 생성
+========================= */
+function create2048Board(){
+    for (let i = 0; i < BLOCK_2048_SIZE * BLOCK_2048_SIZE; i++) {
+        const cell = document.createElement("div");
+        cell.className = "cell-2048";
+        board2048El.appendChild(cell);
+    }
+}
+
+/* =========================
+    초기화
+========================= */
+function initBlock2048(isRestart) {
+    playSound(sndStart);
+    
+    if(!isRestart){
+        board2048El = document.getElementById("board-2048");
+        
+        create2048Board();
+    } else {
+
+    }
+}
