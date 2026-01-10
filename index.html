@@ -183,6 +183,19 @@
             background: #4fc3f7 !important;
         }
 
+        .cell-2048.v-1 { background: #eee4da; color: #776e65; } /* 2 */
+        .cell-2048.v-2 { background: #ede0c8; color: #776e65; } /* 4 */
+        .cell-2048.v-3 { background: #f2b179; color: #f9f6f2; } /* 8 */
+        .cell-2048.v-4 { background: #f59563; color: #f9f6f2; } /* 16 */
+        .cell-2048.v-5 { background: #f67c5f; color: #f9f6f2; } /* 32 */
+        .cell-2048.v-6 { background: #f65e3b; color: #f9f6f2; } /* 64 */
+
+        .cell-2048.v-7 { background: #edcf72; color: #f9f6f2; } /* 128 */
+        .cell-2048.v-8 { background: #edcc61; color: #f9f6f2; } /* 256 */
+        .cell-2048.v-9 { background: #edc850; color: #f9f6f2; } /* 512 */
+        .cell-2048.v-10 { background: #edc53f; color: #f9f6f2; } /* 1024 */
+        .cell-2048.v-11 { background: #edc22e; color: #f9f6f2; } /* 2048 */
+
         .canPlace {
             background: #ffeb3b90;
         }
@@ -339,6 +352,32 @@
 
         .arrow-btn.is-active {
             transform: translateY(2px);
+        }
+
+        /* 공통 애니메이션 시간 */
+        .move-left  { animation: moveLeft  0.08s ease; }
+        .move-right { animation: moveRight 0.08s ease; }
+        .move-up    { animation: moveUp    0.08s ease; }
+        .move-down  { animation: moveDown  0.08s ease; }
+
+        @keyframes moveLeft {
+            from { transform: translateX(0); }
+            to   { transform: translateX(-5px); }
+        }
+
+        @keyframes moveRight {
+            from { transform: translateX(0); }
+            to   { transform: translateX(5px); }
+        }
+
+        @keyframes moveUp {
+            from { transform: translateY(0); }
+            to   { transform: translateY(-5px); }
+        }
+
+        @keyframes moveDown {
+            from { transform: translateY(0); }
+            to   { transform: translateY(5px); }
         }
     </style>
 </head>

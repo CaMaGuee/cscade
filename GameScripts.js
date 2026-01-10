@@ -546,24 +546,35 @@ window.addEventListener("DOMContentLoaded", () => {
 function btnPointerDown(){
     document.getElementById("up-btn").addEventListener("pointerdown", () => {
         moveArrow("up");
+        playMoveAnimation("up");
     });
 
     document.getElementById("down-btn").addEventListener("pointerdown", () => {
         moveArrow("down");
+        playMoveAnimation("down");
     });
 
     document.getElementById("left-btn").addEventListener("pointerdown", () => {
         moveArrow("left");
+        playMoveAnimation("left");
     });
 
     document.getElementById("right-btn").addEventListener("pointerdown", () => {
         moveArrow("right");
+        playMoveAnimation("right");
     });
 }
 
 /* =========================
     키보드 입력
 ========================= */
+const keyToDirection = {
+    ArrowUp: "up",
+    ArrowDown: "down",
+    ArrowLeft: "left",
+    ArrowRight: "right",
+};
+
 let keyToBtn = {
     ArrowUp: document.getElementById("up-btn"),
     ArrowDown: document.getElementById("down-btn"),
@@ -573,22 +584,26 @@ let keyToBtn = {
 
 window.addEventListener("keydown", (event) => {
     const gamePage = document.getElementById("block2048");
+    const direction = keyToDirection[event.key];
+    if(!direction) return;
     if (!isVisible(gamePage)) return;
     if (event.repeat) return;
 
     const btn = keyToBtn[event.key];
     if (!btn) return;
 
+    playMoveAnimation(direction);
+
     btn.classList.add("is-active");
 
     if (event.key === "ArrowUp") {
-        moveArrow("up");
+        moveArrow(direction);
     } else if (event.key === "ArrowDown") {
-        moveArrow("down");
+        moveArrow(direction);
     } else if (event.key === "ArrowLeft") {
-        moveArrow("left");
+        moveArrow(direction);
     } else if (event.key === "ArrowRight") {
-        moveArrow("right");
+        moveArrow(direction);
     }
 });
 
@@ -680,6 +695,33 @@ function moveRight() {
 }
 
 /* =========================
+    무빙 애니메이션
+========================= */
+function playMoveAnimation(direction) {
+    const boardBody = document.getElementById("board-2048-body");
+
+    const className = `move-${direction}`;
+
+    // 혹시 남아있을 수 있으니 제거
+    boardBody.classList.remove(
+        "move-left",
+        "move-right",
+        "move-up",
+        "move-down"
+    );
+
+    // 강제로 reflow (애니메이션 재실행용)
+    void boardBody.offsetWidth;
+
+    boardBody.classList.add(className);
+
+    // 애니메이션 끝나면 제거
+    setTimeout(() => {
+        boardBody.classList.remove(className);
+    }, 100);
+}
+
+/* =========================
     보드 생성
 ========================= */
 function create2048Board(){
@@ -737,6 +779,7 @@ function slideLine(line) {
     for (let i = 0; i < filtered.length; i++) {
         // 다음 숫자가 있고, 현재 숫자와 같다면
         if (filtered[i] === filtered[i + 1]) {
+            playSound(sndlevelUpShort);
             // 두 숫자를 합쳐서 추가
             merged.push(filtered[i] * 2);
 
@@ -783,17 +826,37 @@ function initBlock2048(isRestart) {
     block_2048_render();
 }
 
+function updateCellStyle(cell, value) {
+    // 기존 숫자 관련 클래스 제거
+    cell.classList.forEach(cls => {
+        if (cls.startsWith("v-")) {
+            cell.classList.remove(cls);
+        }
+    });
+
+    if (value === 0) {
+        cell.textContent = "";
+        return;
+    }
+
+    cell.textContent = value;
+
+    // 2 → 1, 4 → 2, 8 → 3 ...
+    const level = Math.log2(value);
+
+    // 예: v-1, v-2, v-3 ...
+    cell.classList.add(`v-${level}`);
+}
+
 function block_2048_render() {
     document.querySelectorAll(".cell-2048").forEach((cell, i) => {
         const x = i % BLOCK_2048_SIZE;
         const y = Math.floor(i / BLOCK_2048_SIZE);
 
         if (board_2048[y][x]) {
-            cell.classList.add("filled");
-            cell.textContent = board_2048[y][x];    // 👈 숫자 표시
+            updateCellStyle(cell, board_2048[y][x]);
         } else {
-            cell.classList.remove("filled");
-            cell.textContent = "";                  // 혹시 모를 잔존 Content 제거
+            updateCellStyle(cell, 0);
         }
     });
 }
