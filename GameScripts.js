@@ -285,6 +285,9 @@ function enablePointer(blockEl, shape, blockIndex) {
 
             // 놓을 수 있으면 해당 위치 cell에 클래스 추가
             if (canPlace(shape, x, y) && !timerDone) {
+                // ✅ ghost 숨기기
+                ghost.classList.add("hidden");
+
                 shape.forEach((row, r) => {
                     row.forEach((v, c) => {
                         if (v) {
@@ -299,8 +302,10 @@ function enablePointer(blockEl, shape, blockIndex) {
                         }
                     });
                 });
+            } else {
+                // ❌ 놓을 수 없으면 ghost 다시 보이기
+                ghost.classList.remove("hidden");
             }
-
             rafId = null;
         });
     });
@@ -310,6 +315,7 @@ function enablePointer(blockEl, shape, blockIndex) {
         blockEl.releasePointerCapture(e.pointerId);
 
         if (!ghost) return;
+        ghost.classList.remove("hidden");
 
         const rect      = boardEl.getBoundingClientRect();
         const cellSize  = rect.width / BOARD_SIZE;
