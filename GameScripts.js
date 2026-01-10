@@ -14,6 +14,10 @@ function navigate(page){
     if (pageEl) pageEl.style.display = "block";
 }
 
+function isVisible(el) {
+    return el && window.getComputedStyle(el).display !== "none";
+}
+
 let turnTimeoutId   = null;
 let turnIntervalId  = null;
 
@@ -70,9 +74,9 @@ function resetTurnTimer(ms) {
 /* =========================
     기본 설정
 ========================= */
-const BOARD_SIZE    = 10;
-let boardEl         = document.getElementById("board");
-let blocksEl        = document.getElementById("blocks");
+const BOARD_SIZE        = 10;
+let boardEl             = document.getElementById("board");
+let blocksEl            = document.getElementById("blocks");
 
 const BLOCK_2048_SIZE   = 4;
 let board2048El         = document.getElementById("board-2048");
@@ -225,7 +229,9 @@ function updateScore(value) {
     Pointer Events 처리
 ========================= */
 function enablePointer(blockEl, shape, blockIndex) {
-    let ghost = null;
+    let ghost               = null;
+    let lastCanPlaceCells   = [];
+    let rafId               = null;
 
     blockEl.addEventListener("pointerdown", e => {
         playSound(sndPick);
@@ -253,43 +259,54 @@ function enablePointer(blockEl, shape, blockIndex) {
 
     window.addEventListener("pointermove", e => {
         if (!ghost) return;
+        if (rafId !== null) return;
 
-        ghost.style.left = (e.clientX - offsetX) + "px";
-        ghost.style.top  = (e.clientY - offsetY) + "px";
+        rafId = requestAnimationFrame(() => {
+            ghost.style.left = (e.clientX - offsetX) + "px";
+            ghost.style.top  = (e.clientY - offsetY) + "px";
 
-        const rect      = boardEl.getBoundingClientRect();
-        const cellSize  = rect.width / BOARD_SIZE;
+            const rect      = boardEl.getBoundingClientRect();
+            const cellSize  = rect.width / BOARD_SIZE;
 
-        const blockWidth    = shape[0].length;
-        const blockHeight   = shape.length;
+            const blockWidth    = shape[0].length;
+            const blockHeight   = shape.length;
 
-        const cellX = Math.floor((e.clientX - 14 - rect.left) / cellSize);
-        const cellY = Math.floor((e.clientY - 14 - rect.top) / cellSize);
+            const cellX = Math.floor((e.clientX - 14 - rect.left) / cellSize);
+            const cellY = Math.floor((e.clientY - 14 - rect.top) / cellSize);
 
-        const x = cellX - (blockWidth - 1);
-        const y = cellY - (blockHeight - 1);
+            const x = cellX - (blockWidth - 1);
+            const y = cellY - (blockHeight - 1);
 
-        // 모든 cell에서 canPlace 클래스 제거
-        document.querySelectorAll(".cell").forEach(cell => cell.classList.remove("canPlace"));
+            // canPlace 요소 제거
+            lastCanPlaceCells.forEach(cell => cell.classList.remove("canPlace"));
+            // canPlace 객체 초기화
+            lastCanPlaceCells = [];
 
-        // 놓을 수 있으면 해당 위치 cell에 클래스 추가
-        if (canPlace(shape, x, y) && !timerDone) {
-            shape.forEach((row, r) => {
-                row.forEach((v, c) => {
-                    if (v) {
-                        const nx = x + c;
-                        const ny = y + r;
-                        if (nx >= 0 && ny >= 0 && nx < BOARD_SIZE && ny < BOARD_SIZE) {
-                            const index = ny * BOARD_SIZE + nx;
-                            boardEl.children[index].classList.add("canPlace");
+
+            // 놓을 수 있으면 해당 위치 cell에 클래스 추가
+            if (canPlace(shape, x, y) && !timerDone) {
+                shape.forEach((row, r) => {
+                    row.forEach((v, c) => {
+                        if (v) {
+                            const nx = x + c;
+                            const ny = y + r;
+                            if (nx >= 0 && ny >= 0 && nx < BOARD_SIZE && ny < BOARD_SIZE) {
+                                const index = ny * BOARD_SIZE + nx;
+                                const cell = boardEl.children[index];
+                                cell.classList.add("canPlace");
+                                lastCanPlaceCells.push(cell);
+                            }
                         }
-                    }
+                    });
                 });
-            });
-        }
+            }
+
+            rafId = null;
+        });
     });
 
     window.addEventListener("pointerup", e => {
+        rafId = null;
         blockEl.releasePointerCapture(e.pointerId);
 
         if (!ghost) return;
@@ -513,6 +530,72 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 /* ============================2048============================ */
+/* =========================
+    키보드 입력
+========================= */
+const keyToBtn = {
+    ArrowUp: document.getElementById("up-btn"),
+    ArrowDown: document.getElementById("down-btn"),
+    ArrowLeft: document.getElementById("left-btn"),
+    ArrowRight: document.getElementById("right-btn"),
+};
+
+window.addEventListener("keydown", (event) => {
+    const gamePage = document.getElementById("block2048");
+    if (!isVisible(gamePage)) return;
+    if (event.repeat) return;
+
+    const btn = keyToBtn[event.key];
+    if (!btn) return;
+
+    btn.classList.add("is-active");
+
+    if (event.key === "ArrowUp") {
+        moveArrow("up");
+    } else if (event.key === "ArrowDown") {
+        moveArrow("down");
+    } else if (event.key === "ArrowLeft") {
+        moveArrow("left");
+    } else if (event.key === "ArrowRight") {
+        moveArrow("right");
+    }
+});
+
+window.addEventListener("keyup", (event) => {
+    const gamePage = document.getElementById("block2048");
+    if (!isVisible(gamePage)) return;
+
+    const btn = keyToBtn[event.key];
+    if (!btn) return;
+
+    btn.classList.remove("is-active");
+    
+    if (event.key === "ArrowUp") {
+
+    } else if (event.key === "ArrowDown") {
+
+    } else if (event.key === "ArrowLeft") {
+
+    } else if (event.key === "ArrowRight") {
+
+    }
+});
+
+/* =========================
+    입력 제어
+========================= */
+function moveArrow(Arrow){
+    if(Arrow == "up"){
+
+    } else if(Arrow == "down"){
+
+    } else if(Arrow == "left"){
+
+    } else if(Arrow == "right"){
+
+    }
+}
+
 /* =========================
     보드 생성
 ========================= */
