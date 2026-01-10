@@ -96,6 +96,10 @@ let board = Array.from({ length: BOARD_SIZE }, () =>
     Array(BOARD_SIZE).fill(0)
 );
 
+let board_2048 = Array.from({ length: BLOCK_2048_SIZE }, () =>
+    Array(BLOCK_2048_SIZE).fill(0)
+);
+
 const sndPick         = new Audio("pick.wav");
 const sndDrop         = new Audio("drop.wav");
 const sndLose         = new Audio("lose.wav");
@@ -537,9 +541,30 @@ window.addEventListener("DOMContentLoaded", () => {
 
 /* ============================2048============================ */
 /* =========================
+    버튼 입력
+========================= */
+function btnPointerDown(){
+    document.getElementById("up-btn").addEventListener("pointerdown", () => {
+        moveArrow("up");
+    });
+
+    document.getElementById("down-btn").addEventListener("pointerdown", () => {
+        moveArrow("down");
+    });
+
+    document.getElementById("left-btn").addEventListener("pointerdown", () => {
+        moveArrow("left");
+    });
+
+    document.getElementById("right-btn").addEventListener("pointerdown", () => {
+        moveArrow("right");
+    });
+}
+
+/* =========================
     키보드 입력
 ========================= */
-const keyToBtn = {
+let keyToBtn = {
     ArrowUp: document.getElementById("up-btn"),
     ArrowDown: document.getElementById("down-btn"),
     ArrowLeft: document.getElementById("left-btn"),
@@ -591,14 +616,66 @@ window.addEventListener("keyup", (event) => {
     입력 제어
 ========================= */
 function moveArrow(Arrow){
+    let btn = null;
+
+    playSound(sndPick);
+
     if(Arrow == "up"){
-
+        moveUp();
     } else if(Arrow == "down"){
-
+        moveDown();
     } else if(Arrow == "left"){
-
+        moveLeft();
     } else if(Arrow == "right"){
+        moveRight();
+    }
 
+    spawnRandomTile();
+    block_2048_render();
+}
+
+/* =========================
+    move 함수
+========================= */
+function moveUp() {
+    for (let x = 0; x < 4; x++) {
+        const column = [];
+        for (let y = 0; y < 4; y++) {
+            column.push(board_2048[y][x]);
+        }
+
+        const moved = slideLine(column);
+
+        for (let y = 0; y < 4; y++) {
+            board_2048[y][x] = moved[y];
+        }
+    }
+}
+
+function moveDown() {
+    for (let x = 0; x < 4; x++) {
+        const column = [];
+        for (let y = 0; y < 4; y++) {
+            column.push(board_2048[y][x]);
+        }
+
+        const moved = slideLine(column.reverse()).reverse();
+
+        for (let y = 0; y < 4; y++) {
+            board_2048[y][x] = moved[y];
+        }
+    }
+}
+
+function moveLeft() {
+    for (let y = 0; y < 4; y++) {
+        board_2048[y] = slideLine(board_2048[y]);
+    }
+}
+
+function moveRight() {
+    for (let y = 0; y < 4; y++) {
+        board_2048[y] = slideLine([...board_2048[y]].reverse()).reverse();
     }
 }
 
@@ -614,10 +691,84 @@ function create2048Board(){
 }
 
 /* =========================
+    블록 랜덤 생성
+========================= */
+function spawnRandomTile() {
+    const emptyCells = [];
+
+    for (let y = 0; y < BLOCK_2048_SIZE; y++) {
+        for (let x = 0; x < BLOCK_2048_SIZE; x++) {
+            if (board_2048[y][x] === 0) {
+                emptyCells.push({ x, y });
+            }
+        }
+    }
+
+    // 빈칸이 없으면 종료 (게임 오버 판단)
+    if (emptyCells.length === 0) {
+        playSound(sndLose);
+        
+        document.querySelectorAll(".cell-2048").forEach(cell => {
+            cell.classList.add("game-over-cell");
+            cell.classList.remove("filled");
+        });
+
+        return;
+    }
+
+    // 랜덤 선택
+    const randomIndex = Math.floor(Math.random() * emptyCells.length);
+    const { x, y } = emptyCells[randomIndex];
+
+    board_2048[y][x] = 2;
+}
+
+/* =========================
+    라인 밀기 (1단계)
+========================= */
+function slideLine(line) {
+    // line: [2, 0, 4, 0] 같은 "한 줄" 배열
+
+    // 0이 아닌 값만 골라낸다
+    // 예: [2, 0, 4, 0] → [2, 4]
+    const filtered  = line.filter(v => v !== 0);
+    const merged    = [];
+
+    for (let i = 0; i < filtered.length; i++) {
+        // 다음 숫자가 있고, 현재 숫자와 같다면
+        if (filtered[i] === filtered[i + 1]) {
+            // 두 숫자를 합쳐서 추가
+            merged.push(filtered[i] * 2);
+
+            // 다음 숫자는 이미 사용했으므로 건너뜀
+            i++;
+        } else {
+            // 다르면 그대로 추가
+            merged.push(filtered[i]);
+        }
+    }
+
+    // 빠진 칸 수만큼 0 배열을 만든다
+    // 예: 전체 4칸 - 숫자 2개 = 0 두 개 필요
+    const zeros = Array(4 - merged.length).fill(0);
+
+    // 숫자들 뒤에 0을 붙여서 한 줄로 완성
+    // 예: [2, 4] + [0, 0] → [2, 4, 0, 0]
+    return [...merged, ...zeros];
+}
+
+/* =========================
     초기화
 ========================= */
 function initBlock2048(isRestart) {
     playSound(sndStart);
+
+    keyToBtn = {
+        ArrowUp: document.getElementById("up-btn"),
+        ArrowDown: document.getElementById("down-btn"),
+        ArrowLeft: document.getElementById("left-btn"),
+        ArrowRight: document.getElementById("right-btn"),
+    };
     
     if(!isRestart){
         board2048El = document.getElementById("board-2048");
@@ -626,4 +777,24 @@ function initBlock2048(isRestart) {
     } else {
 
     }
+
+    btnPointerDown();
+    spawnRandomTile();
+    block_2048_render();
 }
+
+function block_2048_render() {
+    document.querySelectorAll(".cell-2048").forEach((cell, i) => {
+        const x = i % BLOCK_2048_SIZE;
+        const y = Math.floor(i / BLOCK_2048_SIZE);
+
+        if (board_2048[y][x]) {
+            cell.classList.add("filled");
+            cell.textContent = board_2048[y][x];    // 👈 숫자 표시
+        } else {
+            cell.classList.remove("filled");
+            cell.textContent = "";                  // 혹시 모를 잔존 Content 제거
+        }
+    });
+}
+

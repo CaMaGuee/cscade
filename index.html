@@ -161,10 +161,22 @@
             height: 80px;
             background: #ffffff50;
             border-radius: 4px;
+
+            font-size: 40px;
+            font-weight: bold;
+
+            display: flex;
+            justify-content: center; /* 가로 가운데 */
+            align-items: center;     /* 세로 가운데 */
         }
 
         .game-over-cell {
             background: #bf360c50;
+        }
+
+        .cell-2048.game-over-cell {
+            background: #bf360c25 !important;
+            color: #950000;
         }
 
         .filled {
@@ -322,6 +334,10 @@
         }
 
         .arrow-btn:active {
+            transform: translateY(2px);
+        }
+
+        .arrow-btn.is-active {
             transform: translateY(2px);
         }
     </style>
